@@ -1,5 +1,4 @@
 #define SKETCH "electricFence.ino"
-///#include <BlockNot.h>
 #include <Ticker.h>
 #include <dlay.h>                     //Future, change to blockNot.h
 
@@ -44,7 +43,7 @@ void setup() {
 
   redTicker.attach(0.4, redTick);        //start redTick()
 
-  hvTimer.setTime(pulsePeriod);            //Time between pulses
+  hvTimer.setTime(pulsePeriod);          //Time between pulses
   hvTimer.start();
 }
 
