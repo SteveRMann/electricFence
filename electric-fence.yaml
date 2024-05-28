@@ -1,0 +1,70 @@
+# Sends a 10ms pulse every 800ms to the electric-fence Wemos D1 Mini
+#
+
+substitutions:
+  device_name: electric-fence
+  friendly_name: electric_fence
+  my_ssid: iot
+
+packages:
+  wifi: !include common/wifi.yaml
+  device_base: !include common/esp8266.yaml  
+##Overrides:
+esp8266:
+  board: d1_mini
+esphome:
+  on_boot:
+    then:
+      - switch.turn_on: eFence
+
+
+
+######################################################
+#
+# Define the GPIO pins.
+switch:
+  #D4 (GPIO2, LED_BUILTIN)
+  - platform: gpio
+    pin:
+      number: D4 
+      mode: output
+    id: builtinLED
+    inverted: true
+
+  #D1 (Warning LED on PCB)
+  - platform: gpio
+    pin:
+      number: D1
+      mode: output
+    id: warningLED
+
+  #D2 (Gate to HV mosfet)
+  - platform: gpio
+    pin:
+      number: D2
+      mode: output
+    id: hvGate
+
+
+  - platform: template
+    name: ${device_name} LED
+    optimistic: yes
+    id: eFence
+    turn_on_action:
+    - while:
+        condition:
+          lambda: 'return true;'
+        then:
+        - switch.turn_on: builtinLED
+        - switch.turn_on: warningLED
+        - switch.turn_on: hvGate
+        - delay: 10ms
+        - switch.turn_off: builtinLED
+        - switch.turn_off: warningLED
+        - switch.turn_off: hvGate
+        - delay: 400ms
+    turn_off_action:
+    - switch.turn_off: builtinLED
+    - switch.turn_off: warningLED
+    - switch.turn_off: hvGate
+  
