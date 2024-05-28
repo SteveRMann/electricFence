@@ -1,5 +1,7 @@
 # Sends a 10ms pulse every 800ms to the electric-fence Wemos D1 Mini
 #
+# 5/28/2024
+# Compiled with ESPHome 2023.9
 
 substitutions:
   device_name: electric-fence
